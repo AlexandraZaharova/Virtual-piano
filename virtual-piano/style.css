@@ -115,7 +115,6 @@ body {
 .piano-key.piano-key-active,
 .piano-key.sharp.piano-key-active {
     transform: scale(0.96);
-    background-color: red;
 }
 .piano-key.none {
     background-color: transparent;
