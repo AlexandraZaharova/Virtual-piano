@@ -16,7 +16,8 @@ const keyObj = {
     KeyJ: 'J',
     KeyK: 'K',
     KeyL: 'L',
-}
+};
+const btnFullscreen = document.querySelector(".fullscreen");
 
 //воспроизведение аудио
 function playAudio(src) {
@@ -52,9 +53,7 @@ const startCorrespondOver = (event) => {
     });
 }
 
-const stopCorrespondOver = (event) => {
-    // event.target.removeEventListener("mouseover", startSound);
-    // event.target.removeEventListener("mouseout", stopSound);
+const stopCorrespondOver = () => {
     pianoButton.forEach((elem) => {
         elem.classList.remove("piano-key-active");
         elem.classList.remove("piano-key-active-pseudo");
@@ -103,8 +102,18 @@ const keyStopSound = () => {
     });
 }
 
+//fullScreen
+const fullScreen = () => {
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    } else {
+        body.requestFullscreen();
+    }
+}
+
 piano.addEventListener("mousedown", startCorrespondOver, false);
 body.addEventListener("mouseup", stopCorrespondOver);
 window.addEventListener("keydown", keyStartSound);
 window.addEventListener("keyup", keyStopSound);
 btnContainer.addEventListener("click", activeBtn);
+btnFullscreen.addEventListener("click", fullScreen);
