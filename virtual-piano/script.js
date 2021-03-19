@@ -2,7 +2,22 @@ const piano = document.querySelector(".piano");
 const pianoButton = document.querySelectorAll(".piano-key");
 const btnContainer = document.querySelector(".btn-container");
 const btnNoteLet = document.querySelectorAll(".btn");
+const keyObj = {
+    KeyR: 'R',
+    KeyT: 'T',
+    KeyU: 'U',
+    KeyI: 'I',
+    KeyO: 'O',
+    KeyD: 'D',
+    KeyF: 'F',
+    KeyG: 'G',
+    KeyH: 'H',
+    KeyJ: 'J',
+    KeyK: 'K',
+    KeyL: 'L',
+}
 
+//воспроизведение аудио
 function playAudio(src) {
     const audio = new Audio();
     audio.src = src;
@@ -10,6 +25,7 @@ function playAudio(src) {
     audio.play();
 }
 
+//нажатие мышкой
 const startSound = (event) => {
     event.target.classList.add("piano-key-active");
     const note = event.target.dataset.note;
@@ -32,7 +48,7 @@ const startCorrespondOver = (event) => {
     });
 }
 
-const stopCorrespondOver = (event) => {
+const stopCorrespondOver = () => {
     pianoButton.forEach((elem) => {
         elem.classList.remove("piano-key-active");
         elem.removeEventListener("mouseover", startSound);
@@ -40,6 +56,7 @@ const stopCorrespondOver = (event) => {
     });
 }
 
+//переключение кнопок
 const activeBtn = (event) => {
     if (!event.target.classList.contains("btn-active")) {
         btnNoteLet.forEach((elem) => {
@@ -57,6 +74,31 @@ const activeBtn = (event) => {
     }
 }
 
+//нажатие клавиатуры
+const keyStartSound = (event) => {
+    if (event.code in keyObj) {
+        pianoButton.forEach((elem) => {
+            if (elem.getAttribute("data-letter") == keyObj[event.code]) {
+                console.log(elem);
+                if (event.repeat === false) {
+                    elem.classList.add("piano-key-active");
+                    const note = elem.dataset.note;
+                    const src = `assets/audio/${note}.mp3`;
+                    playAudio(src);
+                }
+            }
+        });
+    }
+}
+
+const keyStopSound = (elem) => {
+    pianoButton.forEach((elem) => {
+        elem.classList.remove("piano-key-active");
+    });
+}
+
 piano.addEventListener("mousedown", startCorrespondOver, false);
 piano.addEventListener("mouseup", stopCorrespondOver);
+window.addEventListener("keydown", keyStartSound, false);
+window.addEventListener("keyup", keyStopSound);
 btnContainer.addEventListener("click", activeBtn);
