@@ -1,4 +1,5 @@
 const piano = document.querySelector(".piano");
+const body = document.querySelector("body");
 const pianoButton = document.querySelectorAll(".piano-key");
 const btnContainer = document.querySelector(".btn-container");
 const btnNoteLet = document.querySelectorAll(".btn");
@@ -28,6 +29,7 @@ function playAudio(src) {
 //нажатие мышкой
 const startSound = (event) => {
     event.target.classList.add("piano-key-active");
+    event.target.classList.add("piano-key-active-pseudo");
     const note = event.target.dataset.note;
     const src = `assets/audio/${note}.mp3`;
     playAudio(src);
@@ -35,10 +37,12 @@ const startSound = (event) => {
 
 const stopSound = (event) => {
     event.target.classList.remove("piano-key-active");
+    event.target.classList.remove("piano-key-active-pseudo");
 }
 
 const startCorrespondOver = (event) => {
     event.target.classList.add("piano-key-active");
+    event.target.classList.add("piano-key-active-pseudo");
     const note = event.target.dataset.note;
     const src = `assets/audio/${note}.mp3`;
     playAudio(src);
@@ -48,9 +52,12 @@ const startCorrespondOver = (event) => {
     });
 }
 
-const stopCorrespondOver = () => {
+const stopCorrespondOver = (event) => {
+    // event.target.removeEventListener("mouseover", startSound);
+    // event.target.removeEventListener("mouseout", stopSound);
     pianoButton.forEach((elem) => {
         elem.classList.remove("piano-key-active");
+        elem.classList.remove("piano-key-active-pseudo");
         elem.removeEventListener("mouseover", startSound);
         elem.removeEventListener("mouseout", stopSound);
     });
@@ -79,7 +86,6 @@ const keyStartSound = (event) => {
     if (event.code in keyObj) {
         pianoButton.forEach((elem) => {
             if (elem.getAttribute("data-letter") == keyObj[event.code]) {
-                console.log(elem);
                 if (event.repeat === false) {
                     elem.classList.add("piano-key-active");
                     const note = elem.dataset.note;
@@ -91,14 +97,14 @@ const keyStartSound = (event) => {
     }
 }
 
-const keyStopSound = (elem) => {
+const keyStopSound = () => {
     pianoButton.forEach((elem) => {
         elem.classList.remove("piano-key-active");
     });
 }
 
 piano.addEventListener("mousedown", startCorrespondOver, false);
-piano.addEventListener("mouseup", stopCorrespondOver);
-window.addEventListener("keydown", keyStartSound, false);
+body.addEventListener("mouseup", stopCorrespondOver);
+window.addEventListener("keydown", keyStartSound);
 window.addEventListener("keyup", keyStopSound);
 btnContainer.addEventListener("click", activeBtn);
